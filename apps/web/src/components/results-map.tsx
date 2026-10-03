@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { formatPrice } from "@/lib/catalog";
-import type { ProviderSummary } from "@/lib/types";
+import { formatPrice, type ProviderListItem } from "@ilovewellness/core";
 
 // Mappa schematica dei risultati (prototipo, senza servizio di mappe esterno).
 // Nella versione completa: MapLibre/Mapbox con tile OpenStreetMap — vedi docs/03-architettura.md.
@@ -35,8 +34,8 @@ const landmarks = [
   { name: "Porretta Terme", lat: 44.155, lng: 10.977 },
 ];
 
-export function ResultsMap({ results }: { results: ProviderSummary[] }) {
-  const bounds = fitBounds(results.map((r) => r.provider.location));
+export function ResultsMap({ results }: { results: ProviderListItem[] }) {
+  const bounds = fitBounds(results);
   const project = projector(bounds);
   const visible = landmarks.filter(
     (l) => l.lat > bounds.minLat && l.lat < bounds.maxLat && l.lng > bounds.minLng && l.lng < bounds.maxLng,
@@ -65,15 +64,15 @@ export function ResultsMap({ results }: { results: ProviderSummary[] }) {
             </text>
           );
         })}
-        {results.map(({ provider: p, minPriceCents }) => {
-          const { x, y } = project(p.location.lat, p.location.lng);
+        {results.map((p) => {
+          const { x, y } = project(p.lat, p.lng);
           return (
             <Link key={p.slug} href={`/operatori/${p.slug}`}>
               <g className="cursor-pointer" transform={`translate(${x}, ${y})`}>
-                <title>{`${p.displayName} — da ${formatPrice(minPriceCents)}`}</title>
+                <title>{`${p.displayName} — da ${formatPrice(p.minPriceCents)}`}</title>
                 <rect x={-30} y={-30} width={60} height={22} rx={11} fill="#fff" stroke="#c4704b" strokeWidth="1.5" />
                 <text x={0} y={-15} fontSize="12" textAnchor="middle" fontWeight="600" fill="#1f2a1d">
-                  {formatPrice(minPriceCents)}
+                  {formatPrice(p.minPriceCents)}
                 </text>
                 <circle r={4} fill="#c4704b" />
               </g>

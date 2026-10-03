@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // il pacchetto condiviso è distribuito come sorgente TypeScript
+  transpilePackages: ["@ilovewellness/core"],
 };
 
 export default nextConfig;

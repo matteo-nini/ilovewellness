@@ -31,6 +31,7 @@ select pg_temp.logout();
 select pg_temp.assert((select count(*) from providers) = 8, 'anon vede gli 8 provider verificati');
 select pg_temp.assert((select count(*) from categories) > 10, 'anon vede le categorie');
 select pg_temp.assert((select count(*) from availability_exceptions) = 0, 'anon non vede le eccezioni');
+select pg_temp.assert((select round(lat::numeric, 3) = 44.510 and round(lng::numeric, 3) = 11.344 from locations where provider_id = 'b0000000-0000-0000-0000-000000000002'), 'lat/lng calcolate dalla geografia');
 select pg_temp.assert(
   (select count(*) from search_providers(p_lat => 44.4949, p_lng => 11.3426, p_radius_km => 10)) = 5,
   'ricerca entro 10 km da Bologna centro: 5 risultati');
@@ -42,6 +43,12 @@ select pg_temp.assert(
   (select count(*) from search_providers(p_query => 'shiatsu')) = 1, 'ricerca testuale "shiatsu"');
 select pg_temp.assert(
   (select count(*) from search_providers(p_online => true)) = 2, 'filtro servizi online');
+select pg_temp.assert(
+  (select category_names = array['Shiatsu'] and not instant_booking and not has_online
+     from search_providers(p_query => 'shiatsu')),
+  'la ricerca restituisce discipline e opzioni della card');
+select pg_temp.assert(
+  (select count(*) from search_providers(p_query => 'abhyanga')) = 1, 'la ricerca trova anche i nomi dei servizi');
 select pg_temp.assert(
   (select count(*) from available_slots('e0000000-0000-0000-0000-000000000003', (select slot from t)::date, (select slot from t)::date + 6)) = 5 * 19,
   'shiatsu: 19 slot al giorno dal lunedì al venerdì');

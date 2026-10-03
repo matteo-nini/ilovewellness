@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { rootCategories } from "@/lib/catalog";
+import { rootCategories } from "@ilovewellness/core";
 
 /** Pre-registrazione operatori (prototipo: i dati non vengono inviati). */
 export function PreRegistrationForm() {

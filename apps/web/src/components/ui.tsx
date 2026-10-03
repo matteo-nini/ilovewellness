@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { formatPrice, getCategory } from "@/lib/catalog";
-import type { Provider, ProviderSummary } from "@/lib/types";
+import { formatPrice, type ProviderListItem } from "@ilovewellness/core";
 
 export function Stars({ value, count, size = "sm" }: { value: number; count: number; size?: "sm" | "md" }) {
   if (!count) return <span className="text-sm text-muted">Nuovo</span>;
   return (
     <span className={size === "md" ? "text-base" : "text-sm"}>
       <span aria-hidden className="text-terra-500">★</span>{" "}
-      <span className="font-medium">{value.toLocaleString("it-IT", { minimumFractionDigits: 1 })}</span>{" "}
+      <span className="font-medium">{value.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</span>{" "}
       <span className="text-muted">({count} {count === 1 ? "recensione" : "recensioni"})</span>
     </span>
   );
@@ -22,44 +21,42 @@ export function VerifiedBadge() {
   );
 }
 
-export function Cover({ provider, className = "" }: { provider: Provider; className?: string }) {
-  const [a, b] = provider.palette;
-  const initials = provider.displayName.split(/\s+/).filter((w) => /^[A-Za-zÀ-ÿ]/.test(w)).slice(0, 2).map((w) => w[0]).join("");
+export function Cover({ name, palette, className = "" }: { name: string; palette: [string, string]; className?: string }) {
+  const [a, b] = palette;
+  const initials = name.split(/\s+/).filter((w) => /^[A-Za-zÀ-ÿ]/.test(w)).slice(0, 2).map((w) => w[0]).join("");
   return (
     <div
       className={`relative flex items-end overflow-hidden ${className}`}
       style={{ background: `radial-gradient(circle at 20% 20%, ${b} 0, transparent 55%), linear-gradient(135deg, ${a}, ${b})` }}
       role="img"
-      aria-label={`Immagine di copertina di ${provider.displayName}`}
+      aria-label={`Immagine di copertina di ${name}`}
     >
       <span className="m-4 font-serif text-4xl text-white/90 drop-shadow-sm">{initials}</span>
     </div>
   );
 }
 
-export function ProviderCard({ summary }: { summary: ProviderSummary }) {
-  const { provider: p, minPriceCents, ratingAvg, ratingCount, distanceKm } = summary;
-  const cats = p.categorySlugs.map((c) => getCategory(c)?.name).filter(Boolean).join(" · ");
+export function ProviderCard({ item: p }: { item: ProviderListItem }) {
   return (
     <Link href={`/operatori/${p.slug}`} className="group block overflow-hidden rounded-2xl border border-sand-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg">
-      <Cover provider={p} className="h-36" />
+      <Cover name={p.displayName} palette={p.palette} className="h-36" />
       <div className="space-y-1.5 p-4">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-serif text-lg leading-tight text-sage-900 group-hover:underline">{p.displayName}</h3>
           {p.verified && <VerifiedBadge />}
         </div>
-        <p className="text-sm text-muted">{cats}</p>
+        <p className="text-sm text-muted">{p.categoryNames.join(" · ")}</p>
         <p className="line-clamp-2 text-sm">{p.headline}</p>
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-sm">
-          <Stars value={ratingAvg} count={ratingCount} />
+          <Stars value={p.ratingAvg} count={p.ratingCount} />
           <span>
-            da <strong>{formatPrice(minPriceCents)}</strong>
+            da <strong>{formatPrice(p.minPriceCents)}</strong>
           </span>
         </div>
         <p className="text-xs text-muted">
-          📍 {p.location.city}
-          {distanceKm !== null && ` · ${distanceKm.toLocaleString("it-IT")} km`}
-          {p.services.some((s) => s.mode === "online") && " · anche online"}
+          📍 {p.city}
+          {p.distanceKm !== null && ` · ${p.distanceKm.toLocaleString("it-IT")} km`}
+          {p.hasOnline && " · anche online"}
           {p.instantBooking ? " · prenotazione immediata" : " · su richiesta"}
         </p>
       </div>
@@ -76,3 +73,18 @@ export function SectionTitle({ eyebrow, title, children }: { eyebrow?: string; t
     </div>
   );
 }
+
+export function Notice({ children, tone = "info" }: { children: React.ReactNode; tone?: "info" | "error" | "success" }) {
+  const styles = {
+    info: "border-sand-200 bg-sand-100 text-ink",
+    error: "border-terra-400 bg-terra-400/10 text-terra-600",
+    success: "border-sage-300 bg-sage-100 text-sage-900",
+  }[tone];
+  return <div role={tone === "error" ? "alert" : "status"} className={`rounded-xl border p-4 text-sm ${styles}`}>{children}</div>;
+}
+
+export const buttonClass = {
+  primary: "rounded-xl bg-terra-500 px-5 py-2.5 font-medium text-white transition hover:bg-terra-600 disabled:opacity-50",
+  secondary: "rounded-xl border border-sage-300 px-5 py-2.5 font-medium text-sage-700 transition hover:bg-sage-100 disabled:opacity-50",
+  field: "mt-1 w-full rounded-xl border border-sand-200 bg-white px-3 py-2",
+};

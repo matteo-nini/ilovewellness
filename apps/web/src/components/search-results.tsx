@@ -1,8 +1,8 @@
 import { ResultsMap } from "@/components/results-map";
 import { ProviderCard } from "@/components/ui";
-import type { ProviderSummary } from "@/lib/types";
+import type { ProviderListItem } from "@ilovewellness/core";
 
-export function SearchResults({ results }: { results: ProviderSummary[] }) {
+export function SearchResults({ results }: { results: ProviderListItem[] }) {
   if (!results.length) {
     return (
       <div className="rounded-2xl border border-dashed border-sand-200 bg-white p-10 text-center">
@@ -15,7 +15,7 @@ export function SearchResults({ results }: { results: ProviderSummary[] }) {
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px]">
       <div className="grid content-start gap-5 sm:grid-cols-2">
         {results.map((s) => (
-          <ProviderCard key={s.provider.slug} summary={s} />
+          <ProviderCard key={s.slug} item={s} />
         ))}
       </div>
       <div className="lg:sticky lg:top-24 lg:self-start">

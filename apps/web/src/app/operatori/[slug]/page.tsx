@@ -1,24 +1,29 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { formatDuration, formatPrice, getCategory, modeLabel, policyLabel, ratingOf } from "@ilovewellness/core";
 import { BookingWidget } from "@/components/booking-widget";
 import { Cover, Stars, VerifiedBadge } from "@/components/ui";
-import { allProviders, formatDuration, formatPrice, getCategory, getProvider, modeLabel, policyLabel, ratingOf } from "@/lib/catalog";
+import { isLive } from "@/lib/env";
+import { getCatalog } from "@/lib/source";
 
-export function generateStaticParams() {
-  return allProviders().map((p) => ({ slug: p.slug }));
+// le schede vengono generate in anticipo e aggiornate al massimo ogni 5 minuti
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  return (await getCatalog().listProviderSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(props: PageProps<"/operatori/[slug]">): Promise<Metadata> {
-  const p = getProvider((await props.params).slug);
+  const p = await getCatalog().getProvider((await props.params).slug);
   return p ? { title: `${p.displayName} — ${p.location.city}`, description: p.headline } : {};
 }
 
 const languageNames: Record<string, string> = { it: "Italiano", en: "Inglese", fr: "Francese", de: "Tedesco", es: "Spagnolo" };
 
 export default async function ProviderPage(props: PageProps<"/operatori/[slug]">) {
-  const p = getProvider((await props.params).slug);
-  if (!p) notFound();
+  const p = await getCatalog().getProvider((await props.params).slug);
+  if (!p || !p.verified) notFound();
   const { avg, count } = ratingOf(p);
   const cats = p.categorySlugs.map((c) => getCategory(c)?.name).filter(Boolean);
 
@@ -43,7 +48,7 @@ export default async function ProviderPage(props: PageProps<"/operatori/[slug]">
         <span className="text-ink">{p.displayName}</span>
       </nav>
 
-      <Cover provider={p} className="h-56 rounded-3xl sm:h-72" />
+      <Cover name={p.displayName} palette={p.palette} className="h-56 rounded-3xl sm:h-72" />
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div>
@@ -69,14 +74,16 @@ export default async function ProviderPage(props: PageProps<"/operatori/[slug]">
             <p className="mt-3 text-sm text-muted">Lingue: {p.languages.map((l) => languageNames[l] ?? l).join(", ")}</p>
           </section>
 
-          <section className="mt-10">
-            <h2 className="font-serif text-2xl text-sage-900">Formazione e verifiche</h2>
-            <ul className="mt-3 space-y-2">
-              {p.credentials.map((c) => (
-                <li key={c} className="flex gap-2"><span aria-hidden className="text-sage-500">✓</span>{c}</li>
-              ))}
-            </ul>
-          </section>
+          {p.credentials.length > 0 && (
+            <section className="mt-10">
+              <h2 className="font-serif text-2xl text-sage-900">Formazione e verifiche</h2>
+              <ul className="mt-3 space-y-2">
+                {p.credentials.map((c) => (
+                  <li key={c} className="flex gap-2"><span aria-hidden className="text-sage-500">✓</span>{c}</li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <section className="mt-10">
             <h2 className="font-serif text-2xl text-sage-900">Servizi</h2>
@@ -125,12 +132,12 @@ export default async function ProviderPage(props: PageProps<"/operatori/[slug]">
         </div>
 
         <aside className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
-          <BookingWidget provider={p} />
+          <BookingWidget provider={p} live={isLive} />
           <div className="rounded-2xl border border-sand-200 bg-white p-5 text-sm">
             <p className="font-medium">Hai una domanda?</p>
             <p className="mt-1 text-muted">Scrivi a {p.displayName} prima di prenotare: di solito risponde entro poche ore.</p>
-            <button disabled className="mt-3 w-full cursor-not-allowed rounded-xl border border-sage-300 py-2 text-sage-700 opacity-70" title="Disponibile nella versione completa">
-              💬 Invia un messaggio
+            <button disabled className="mt-3 w-full cursor-not-allowed rounded-xl border border-sage-300 py-2 text-sage-700 opacity-70" title="Prossimo passo dello sviluppo">
+              💬 Chat in arrivo
             </button>
           </div>
         </aside>

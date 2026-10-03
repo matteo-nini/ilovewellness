@@ -5,7 +5,7 @@ contatto chi cerca benessere con operatori olistici, insegnanti di yoga e medita
 strutture **verificati**: ricerca su mappa, recensioni reali, chat e prenotazione con pagamento.
 Ispirato a **Unobravo** (fiducia, professionisti verificati) e **Airbnb** (marketplace, mappa, recensioni).
 
-Progetto nato dalla rete **Confbenessere**. Stato: **Fase 0 — studio di fattibilità e prototipo**.
+Progetto nato dalla rete **Confbenessere**. Stato: **Fase 0 → 1 — studio completato, sviluppo dell'MVP avviato** (web, app e database collegati).
 
 ## 📚 Documentazione
 
@@ -20,51 +20,46 @@ Progetto nato dalla rete **Confbenessere**. Stato: **Fase 0 — studio di fattib
 | 07 | [Finanziamento](docs/07-finanziamento.md) | Il nodo Ministero della Salute, altre fonti, fabbisogno |
 | 08 | [Domande aperte](docs/08-domande-aperte.md) | Cosa serve sapere dal promotore per proseguire |
 | 09 | [Backend e costi dei servizi](docs/09-backend-e-costi-servizi.md) | Serve Supabase? Alternative, costi mensili di tutti i servizi, account da aprire |
+| 10 | [Guida allo sviluppo](docs/10-sviluppo.md) | Setup, modalità demo/live, Supabase in pratica, migrazioni, deploy |
+| 11 | [App mobile](docs/11-app-mobile.md) | React Native per sviluppatori web, provarla sul telefono, come mostrarla |
+| 12 | [Contenuti e marchio](docs/12-contenuti-sito.md) | Recupero dal sito WordPress, rischio sul nome |
 | ADR | [Decisioni architetturali](docs/adr/) | [0001 Monorepo](docs/adr/0001-monorepo.md) · [0002 Stack](docs/adr/0002-stack-supabase-nextjs-expo.md) |
 
 ## 🗂️ Struttura del repository
 
 ```
-apps/web/        Next.js — sito pubblico + web app (oggi: prototipo cliccabile con dati demo)
-apps/mobile/     Expo — app iOS/Android (Fase 2, segnaposto)
+apps/web/        Next.js 16 — sito pubblico + web app + area operatore
+apps/mobile/     Expo (React Native) — app iOS/Android, esportabile anche per il web
+packages/core/   Logica e tipi condivisi tra web e app (ricerca, slot, prenotazioni, accesso a Supabase)
 supabase/        Schema Postgres versionato, seed demo, test di sicurezza (RLS)
-docs/            Studio, requisiti, architettura, roadmap, marketing, legale
+docs/            Studio, requisiti, architettura, roadmap, marketing, legale, guide
 ```
 
 ## 🚀 Avvio rapido
 
-Requisiti: Node ≥ 20, pnpm 10.
+Requisiti: Node ≥ 20, pnpm 10. Guida completa: [docs/10-sviluppo.md](docs/10-sviluppo.md).
 
 ```bash
 pnpm install
-pnpm dev            # http://localhost:3000 — prototipo web
-pnpm build && pnpm lint && pnpm typecheck
+pnpm dev            # sito + web app → http://localhost:3000
+pnpm dev:mobile     # app → QR code da aprire con Expo Go sul telefono
 ```
 
-Pagine del prototipo: `/` home · `/cerca` ricerca con filtri e mappa · `/operatori/[slug]` scheda con
-prenotazione · `/benessere/[categoria]/[citta]` pagine SEO · `/per-operatori` piani e pre-registrazione.
-
-### Database
-
-Schema in [`supabase/migrations`](supabase/migrations): profili, provider (operatori/strutture),
-sedi con geolocalizzazione (PostGIS), servizi, disponibilità, prenotazioni anti-sovrapposizione,
-recensioni verificate, chat, verifica documenti, segnalazioni DSA — tutto protetto da Row Level Security.
+Senza configurazione tutto gira in **modalità demo** (dati fittizi). Per usare il database reale
+(progetto Supabase `ilovewellness-dev`, già popolato):
 
 ```bash
-# Test su un Postgres locale (serve PostGIS): applica stub Supabase + migrazioni + seed + test
-pnpm test:db
-
-# Oppure con Supabase CLI (Docker)
-supabase init   # la prima volta: crea supabase/config.toml
-supabase start && supabase db reset
+cp apps/web/.env.example apps/web/.env.local
+cp apps/mobile/.env.example apps/mobile/.env.local
 ```
+
+Controlli: `pnpm typecheck` · `pnpm test` · `pnpm lint` · `pnpm build` · `pnpm test:db` (Postgres + PostGIS locale).
 
 ## ✅ Stato
 
 - [x] Studio di fattibilità e documentazione
-- [x] Schema dati MVP + test RLS (30+ verifiche automatiche)
-- [x] Prototipo web cliccabile (dati fittizi)
-- [ ] Risposte alle [domande aperte](docs/08-domande-aperte.md) e interviste di validazione
-- [ ] Brand identity, dominio, marchio
-- [ ] Progetto Supabase (UE) + collegamento del web al backend
-- [ ] Autenticazione, onboarding operatori, Stripe Connect, chat → MVP (vedi roadmap)
+- [x] Database su Supabase (Francoforte) con regole di sicurezza e test automatici
+- [x] Web: ricerca, schede, prenotazione reale (pagamento in struttura), login, le mie prenotazioni, area operatore
+- [x] App mobile: esplora, scheda e prenotazione, le mie prenotazioni, profilo
+- [ ] Risposte alle [domande aperte](docs/08-domande-aperte.md), contenuti dal sito WordPress, verifica marchio
+- [ ] Onboarding operatori completo, back-office admin, chat, email, Stripe Connect → MVP (vedi [roadmap](docs/04-roadmap-tempi-costi.md))

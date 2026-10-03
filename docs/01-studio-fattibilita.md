@@ -173,6 +173,7 @@ Supabase), come fa Unobravo con app e web app coerenti. Si veda l'[ADR-0001](adr
 | R6 | Compliance (GDPR, DSA, DAC7, P2B, Omnibus, EAA) | Media | Medio | Stripe Connect per KYC e pagamenti; consulente legale dal giorno 1; vedi doc 06 |
 | R7 | Concorrenza (Treatwell/ClassPass) | Media | Medio | Nicchia olistica + verifica + comunità; i grandi non presidiano l'olistico |
 | R8 | Team/esecuzione | Media | Alto | CTO/tech lead dedicato o partner tecnico con equity; roadmap per fasi con milestone misurabili |
+| R9 | Nome/marchio: "I LOVE Wellness" è già un marchio di prodotti in Europa | Media | Medio | Ricerca di anteriorità EUIPO/UIBM prima di brand e store; piano B sul nome (vedi [12](12-contenuti-sito.md#2--attenzione-al-nome-ilovewellness)) |
 
 ## 9. KPI per decidere (go / no-go)
 

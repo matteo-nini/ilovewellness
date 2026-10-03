@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { SearchForm } from "@/components/search-form";
 import { ProviderCard, SectionTitle } from "@/components/ui";
-import { rootCategories, searchProviders } from "@/lib/catalog";
+import { rootCategories } from "@ilovewellness/core";
+import { getCatalog } from "@/lib/source";
 
-export default function Home() {
-  const featured = searchProviders({}).slice(0, 4);
+// rigenera la pagina al massimo ogni 5 minuti con i dati aggiornati
+export const revalidate = 300;
+
+export default async function Home() {
+  const featured = (await getCatalog().searchProviders({})).slice(0, 4);
 
   return (
     <>
@@ -67,7 +71,7 @@ export default function Home() {
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((s) => (
-            <ProviderCard key={s.provider.slug} summary={s} />
+            <ProviderCard key={s.slug} item={s} />
           ))}
         </div>
       </section>

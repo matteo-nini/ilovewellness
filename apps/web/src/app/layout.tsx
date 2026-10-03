@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { UserMenu } from "@/components/user-menu";
+import { isLive } from "@/lib/env";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +21,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Vai al contenuto
         </a>
         <div className="bg-sage-900 px-4 py-1.5 text-center text-xs text-sand-100">
-          Prototipo dimostrativo — dati e operatori fittizi, nessuna prenotazione reale.
+          {isLive
+            ? "Versione di sviluppo — operatori di esempio, pagamento in struttura."
+            : "Modalità demo — dati e operatori fittizi, nessuna prenotazione reale."}
         </div>
         <header className="sticky top-0 z-40 border-b border-sand-200 bg-sand-50/90 backdrop-blur">
           <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3" aria-label="Principale">
@@ -28,10 +32,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </Link>
             <div className="flex items-center gap-1 text-sm sm:gap-4">
               <Link href="/cerca" className="rounded-full px-3 py-2 hover:bg-sand-100">Cerca</Link>
-              <Link href="/per-operatori" className="rounded-full px-3 py-2 hover:bg-sand-100">Sei un operatore?</Link>
-              <span className="hidden rounded-full border border-sage-300 px-4 py-2 text-sage-700 sm:inline" title="Disponibile nella versione completa">
-                Accedi
-              </span>
+              <Link href="/chi-siamo" className="hidden rounded-full px-3 py-2 hover:bg-sand-100 sm:inline">Chi siamo</Link>
+              <Link href="/per-operatori" className="hidden rounded-full px-3 py-2 hover:bg-sand-100 sm:inline">Sei un operatore?</Link>
+              <UserMenu live={isLive} />
             </div>
           </nav>
         </header>

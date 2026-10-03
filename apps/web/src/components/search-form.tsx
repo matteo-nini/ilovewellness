@@ -1,5 +1,4 @@
-import { allCities, rootCategories } from "@/lib/catalog";
-import type { SearchFilters } from "@/lib/types";
+import { allCities, rootCategories, type SearchFilters } from "@ilovewellness/core";
 
 /** Barra di ricerca principale: semplice form GET, funziona anche senza JavaScript. */
 export function SearchForm({ defaults = {}, compact = false }: { defaults?: SearchFilters; compact?: boolean }) {

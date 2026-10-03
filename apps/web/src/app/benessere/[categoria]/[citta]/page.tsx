@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SearchResults } from "@/components/search-results";
-import { allCities, getCategory, getCity, rootCategories, searchProviders } from "@/lib/catalog";
+import { allCities, getCategory, getCity, rootCategories } from "@ilovewellness/core";
+import { getCatalog } from "@/lib/source";
+
+export const revalidate = 300;
 
 export function generateStaticParams() {
   return rootCategories().flatMap((c) => allCities().map((city) => ({ categoria: c.slug, citta: city.slug })));
@@ -27,7 +30,7 @@ export async function generateMetadata(props: PageProps<"/benessere/[categoria]/
 
 export default async function CategoryCityPage(props: PageProps<"/benessere/[categoria]/[citta]">) {
   const { category, city } = await resolve(props);
-  const results = searchProviders({ category: category.slug, city: city.slug });
+  const results = await getCatalog().searchProviders({ category: category.slug, city: city.slug });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">

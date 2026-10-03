@@ -7,7 +7,7 @@ on:
 
 jobs:
   web:
-    name: Web (lint, typecheck, build)
+    name: Web, app e core (lint, typecheck, test, build)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +19,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
+      - run: pnpm test
       - run: pnpm build
 
   database:

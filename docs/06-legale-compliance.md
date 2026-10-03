@@ -59,7 +59,7 @@ finanziato). Da confermare in base al bando (doc [07](07-finanziamento.md)).
 - [ ] Dichiarazione di accessibilità
 - [ ] DPIA e registro dei trattamenti
 - [ ] Contratti con fornitori (DPA)
-- [ ] Ricerca di anteriorità e deposito marchio "ILoveWellness"
+- [ ] Ricerca di anteriorità e deposito marchio "ILoveWellness" — **attenzione: "I LOVE Wellness" è già usato per prodotti in Europa** (vedi [12](12-contenuti-sito.md))
 
 ## 6. Fiscalità della commissione
 

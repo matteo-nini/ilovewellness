@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { SearchForm } from "@/components/search-form";
 import { SearchResults } from "@/components/search-results";
-import { getCategory, getCity, searchProviders } from "@/lib/catalog";
-import type { SearchFilters } from "@/lib/types";
+import { getCategory, getCity, type SearchFilters } from "@ilovewellness/core";
+import { getCatalog } from "@/lib/source";
 
 export const metadata: Metadata = { title: "Cerca" };
 
@@ -19,7 +19,7 @@ export default async function SearchPage(props: PageProps<"/cerca">) {
     verifiedOnly: one(sp.verificati) === "1",
     maxPrice: Number.isFinite(maxPrice) && maxPrice > 0 ? maxPrice : undefined,
   };
-  const results = searchProviders(filters);
+  const results = await getCatalog().searchProviders(filters);
   const where = filters.city ? getCity(filters.city)?.name : undefined;
   const what = filters.category ? getCategory(filters.category)?.name : filters.q;
 
