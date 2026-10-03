@@ -1,0 +1,16 @@
+{
+  "name": "ilovewellness",
+  "private": true,
+  "description": "ILoveWellness — marketplace del benessere (monorepo)",
+  "scripts": {
+    "dev": "pnpm --filter @ilovewellness/web dev",
+    "build": "pnpm --filter @ilovewellness/web build",
+    "lint": "pnpm --filter @ilovewellness/web lint",
+    "typecheck": "pnpm --filter @ilovewellness/web typecheck",
+    "test:db": "supabase/tests/run.sh"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
