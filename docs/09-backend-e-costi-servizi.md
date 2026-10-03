@@ -135,7 +135,7 @@ reale su hosting condiviso non si può fare bene.
 Cosa significa davvero "migliaia di accessi":
 - **Utenti registrati ≠ utenti contemporanei ≠ query contemporanee.** 10.000 utenti attivi al mese
   in un marketplace di questo tipo producono, nell'ora di punta, qualche decina di persone
-  connesse insieme e **pochi richieste al secondo** al database. Il pilota sarà ben sotto.
+  connesse insieme e **poche richieste al secondo** al database. Il pilota sarà ben sotto.
 - **PostgreSQL gestisce la concorrenza con un processo per connessione** e regge benissimo letture
   e scritture parallele; i vincoli che abbiamo messo (es. il blocco delle doppie prenotazioni) sono
   garantiti dal database anche con molte richieste simultanee.
