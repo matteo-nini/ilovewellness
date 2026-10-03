@@ -27,7 +27,10 @@
 | Osservabilità | Sentry · PostHog EU (con consenso) · log Supabase | |
 | CI/CD | GitHub Actions + Vercel + EAS Build/Submit | |
 
-Costo infrastruttura stimato in MVP: **€100–€300/mese** (Supabase Pro, Vercel Pro, Expo EAS,
+Supabase non è obbligatorio: alternative, motivazioni e costi dettagliati di ogni servizio sono in
+[09-backend-e-costi-servizi.md](09-backend-e-costi-servizi.md).
+
+Costo infrastruttura stimato al lancio dell'MVP: **€80–€150/mese** (Supabase Pro, Vercel Pro, Expo EAS,
 Mapbox/MapTiler, Resend, Sentry) + commissioni Stripe (~1,5% + €0,25 per carte UE) + account
 sviluppatore Apple (99 $/anno) e Google (25 $ una tantum).
 

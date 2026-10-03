@@ -81,7 +81,7 @@ Tutti i requisiti **M** di [02-requisiti.md](02-requisiti.md), web responsive (i
 |---|---|
 | Sviluppo (MVP + app native + evoluzioni) | €120k–€200k |
 | Design e brand | €10k–€25k |
-| Infrastruttura e servizi SaaS | €3k–€6k |
+| Infrastruttura e servizi SaaS (dettaglio in [09](09-backend-e-costi-servizi.md)) | €1,5k–€4k |
 | Legale, privacy (DPIA, contratti, T&C), commercialista | €8k–€15k |
 | Marketing di lancio (area pilota) | €30k–€60k |
 | Community/onboarding operatori | €25k–€40k |

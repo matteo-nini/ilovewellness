@@ -19,6 +19,10 @@ native (come Unobravo), pagamenti marketplace e chat in tempo reale, dati in UE.
 Supabase (Postgres + PostGIS, Auth, Storage, Realtime, Edge Functions) in regione Francoforte;
 Next.js per sito e web app; Expo per le app; Stripe Connect Express per i pagamenti.
 
+## Costi e alternative
+Confronto completo con Firebase, backend su misura, Sharetribe e no-code, più i costi mensili di
+tutti i servizi: [docs/09-backend-e-costi-servizi.md](../09-backend-e-costi-servizi.md).
+
 ## Conseguenze
 - Le regole di accesso vanno scritte e **testate** in SQL (RLS) — vedi `supabase/tests`.
 - I tipi TypeScript si generano dallo schema (`supabase gen types`) e si condividono tra web e app.

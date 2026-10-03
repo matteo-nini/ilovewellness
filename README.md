@@ -19,6 +19,7 @@ Progetto nato dalla rete **Confbenessere**. Stato: **Fase 0 — studio di fattib
 | 06 | [Legale e compliance](docs/06-legale-compliance.md) | Forma societaria, L. 4/2013, DSA, P2B, Omnibus, DAC7, GDPR, accessibilità |
 | 07 | [Finanziamento](docs/07-finanziamento.md) | Il nodo Ministero della Salute, altre fonti, fabbisogno |
 | 08 | [Domande aperte](docs/08-domande-aperte.md) | Cosa serve sapere dal promotore per proseguire |
+| 09 | [Backend e costi dei servizi](docs/09-backend-e-costi-servizi.md) | Serve Supabase? Alternative, costi mensili di tutti i servizi, account da aprire |
 | ADR | [Decisioni architetturali](docs/adr/) | [0001 Monorepo](docs/adr/0001-monorepo.md) · [0002 Stack](docs/adr/0002-stack-supabase-nextjs-expo.md) |
 
 ## 🗂️ Struttura del repository
